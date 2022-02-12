@@ -180,7 +180,7 @@ func readConfig() {
 	/* database queries */
 
 	var reData = regexp.MustCompile(`database_data\[(\d)\]`)
-	var reQueries = regexp.MustCompile(`database_queries\[(\d)\]`)
+	var reQueries = regexp.MustCompile(`database_metrics\[(\d)\]`)
 
 	envParamsData := []int{}
 	envParamsQueries := []int{}
@@ -242,19 +242,19 @@ func readConfig() {
 	}
 
 	//queries
-	if viper.IsSet("database_queries") {
-		config.Setting.DATABASE_QUERIES = nil
-		dataConfig := viper.Get("database_queries")
+	if viper.IsSet("database_metrics") {
+		config.Setting.DATABASE_METRICS = nil
+		dataConfig := viper.Get("database_metrics")
 		dataVal := dataConfig.([]interface{})
 		for idx := range dataVal {
 			val := dataVal[idx].(map[string]interface{})
-			data := config.PromCasaDataQuery{}
+			data := config.PromCasaMetrics{}
 			defaults.SetDefaults(&data) //<-- This set the defaults values
 			err := mapstructure.Decode(val, &data)
 			if err != nil {
 				logger.Error("ERROR during mapstructure decode[1]:", err)
 			}
-			config.Setting.DATABASE_QUERIES = append(config.Setting.DATABASE_QUERIES, data)
+			config.Setting.DATABASE_METRICS = append(config.Setting.DATABASE_METRICS, data)
 		}
 	}
 
@@ -262,22 +262,22 @@ func readConfig() {
 	sort.Ints(envParamsQueries[:])
 	//Here we do ENV check
 	for _, idx := range envParamsQueries {
-		value := allSettings[fmt.Sprintf("database_queries[%d]", idx)]
+		value := allSettings[fmt.Sprintf("database_metrics[%d]", idx)]
 		val := value.(map[string]interface{})
 		//If the configuration already exists - we replace only existing params
-		if len(config.Setting.DATABASE_QUERIES) > idx {
-			err := mapstructure.Decode(val, &config.Setting.DATABASE_QUERIES[idx])
+		if len(config.Setting.DATABASE_METRICS) > idx {
+			err := mapstructure.Decode(val, &config.Setting.DATABASE_METRICS[idx])
 			if err != nil {
 				logger.Error("ERROR during mapstructure decode[0]:", err)
 			}
 		} else {
-			data := config.PromCasaDataQuery{}
+			data := config.PromCasaMetrics{}
 			defaults.SetDefaults(&data) //<-- This set the defaults values
 			err := mapstructure.Decode(val, &data)
 			if err != nil {
 				logger.Error("ERROR during mapstructure decode[1]:", err)
 			}
-			config.Setting.DATABASE_QUERIES = append(config.Setting.DATABASE_QUERIES, data)
+			config.Setting.DATABASE_METRICS = append(config.Setting.DATABASE_METRICS, data)
 		}
 	}
 

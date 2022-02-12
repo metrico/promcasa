@@ -16,14 +16,16 @@
       "debug": true
     }
   ],
-  "database_queries": [
+  "database_metrics": [
     {
-      "help": "Query to database. Refesh takes unit sign: (ns, ms, s, m, h)",
+      "_info": "Query to database. Refesh takes unit sign: (ns, ms, s, m, h)",
       "name": "my_status",
+      "help": "My Status",
       "query": "SELECT status, group, count(*) FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-60)) AND (datetime < toDateTime(now()) ) group by status, group",
-      "counter_position": 2,
+      "labels": ["status","group"],
+      "counter_name": "counter",
       "refresh": "60s",
-      "metrics":["g"]
+      "type":["g"]
     }
   ],
   "http_settings": {

@@ -3,6 +3,7 @@ package config
 import (
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"gopkg.in/go-playground/validator.v9"
 )
 
@@ -29,12 +30,14 @@ type PromCasaDataBase struct {
 	Strategy     string `json:"strategy" mapstructure:"strategy" default:"failover"`
 }
 
-type PromCasaDataQuery struct {
-	Name            string   `json:"name" mapstructure:"name" default:""`
-	Query           string   `json:"query" mapstructure:"query" default:""`
-	CounterPosition uint32   `json:"counter_position" mapstructure:"counter_position" default:"1"`
-	RefreshString   string   `json:"refresh" mapstructure:"refresh" default:"60s"`
-	Metrics         []string `json:"metrics" mapstructure:"metrics" default:"[g]"`
+type PromCasaMetrics struct {
+	Name          string   `json:"name" mapstructure:"name" default:""`
+	Help          string   `json:"help" mapstructure:"help" default:""`
+	Query         string   `json:"query" mapstructure:"query" default:""`
+	CounterName   string   `json:"counter_name" mapstructure:"counter_name" default:"counter"`
+	RefreshString string   `json:"refresh" mapstructure:"refresh" default:"60s"`
+	MetricType    string   `json:"type" mapstructure:"type" default:"gauge"`
+	MetricLabels  []string `json:"labels" mapstructure:"labels" default:"gauge"`
 }
 
 type PromCasaSettingServer struct {
@@ -44,9 +47,10 @@ type PromCasaSettingServer struct {
 	DataDatabaseGroupNodeMap map[string][]string
 	Validate                 *validator.Validate
 	EnvPrefix                string `default:"PROMCASA"`
+	PromGaugeMap             map[string]*prometheus.GaugeVec
 
-	DATABASE_DATA    []PromCasaDataBase  `json:"database_data" mapstructure:"database_data"`
-	DATABASE_QUERIES []PromCasaDataQuery `json:"database_queries" mapstructure:"database_queries"`
+	DATABASE_DATA    []PromCasaDataBase `json:"database_data" mapstructure:"database_data"`
+	DATABASE_METRICS []PromCasaMetrics  `json:"database_metrics" mapstructure:"database_metrics"`
 
 	SYSTEM_SETTINGS struct {
 		HostName             string `json:"hostname" mapstructure:"hostname" default:"hostname"`
@@ -56,8 +60,6 @@ type PromCasaSettingServer struct {
 		DBTimer              string `json:"db_timer" mapstructure:"db_timer" default:"1s"`
 		BufferSizeSample     uint32 `json:"buffer_size_sample" mapstructure:"buffer_size_sample" default:"200000"`
 		BufferSizeTimeSeries uint32 `json:"buffer_size_timeseries" mapstructure:"buffer_size_timeseries" default:"200000"`
-		ChannelsSample       int    `json:"channels_sample" mapstructure:"channels_sample" default:"3"`
-		ChannelsTimeSeries   int    `json:"channels_timeseries" mapstructure:"channels_timeseries" default:"5"`
 		CPUMaxProcs          int    `json:"cpu_max_procs" mapstructure:"cpu_max_procs" default:"1"`
 	} `json:"system_settings" mapstructure:"system_settings"`
 
