@@ -51,7 +51,8 @@ type PromCasaSettingServer struct {
 	Validate                 *validator.Validate
 	EnvPrefix                string `default:"PROMCASA"`
 
-	DATABASE_DATA []PromCasaDataBase `json:"database_data" mapstructure:"database_data"`
+	DATABASE_DATA    []PromCasaDataBase  `json:"database_data" mapstructure:"database_data"`
+	DATABASE_QUERIES []PromCasaDataQuery `json:"database_queries" mapstructure:"database_queries"`
 
 	SYSTEM_SETTINGS struct {
 		HostName             string `json:"hostname" mapstructure:"hostname" default:"hostname"`

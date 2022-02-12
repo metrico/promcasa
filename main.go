@@ -177,15 +177,27 @@ func readConfig() {
 		logger.Debug("couldn't unmarshal viper.")
 	}
 
-	var re = regexp.MustCompile(`database_data\[(\d)\]`)
-	envParams := []int{}
+	/* database data connection */
+	/* database queries */
+
+	var reData = regexp.MustCompile(`database_data\[(\d)\]`)
+	var reQueries = regexp.MustCompile(`database_queries\[(\d)\]`)
+
+	envParamsData := []int{}
+	envParamsQueries := []int{}
 	allSettings := viper.AllSettings()
 	for key, _ := range allSettings {
 		if strings.HasPrefix(key, "database_data[") {
-			key = re.ReplaceAllString(key, "$1")
+			key = reData.ReplaceAllString(key, "$1")
 			i, err := strconv.Atoi(key)
 			if err == nil {
-				envParams = append(envParams, i)
+				envParamsData = append(envParamsData, i)
+			}
+		} else if strings.HasPrefix(key, "database_queries[") {
+			key = reQueries.ReplaceAllString(key, "$1")
+			i, err := strconv.Atoi(key)
+			if err == nil {
+				envParamsQueries = append(envParamsQueries, i)
 			}
 		}
 	}
@@ -208,9 +220,9 @@ func readConfig() {
 	}
 
 	//We should do extraction and after sorting 0,1,2,3
-	sort.Ints(envParams[:])
+	sort.Ints(envParamsData[:])
 	//Here we do ENV check
-	for _, idx := range envParams {
+	for _, idx := range envParamsData {
 		value := allSettings[fmt.Sprintf("database_data[%d]", idx)]
 		val := value.(map[string]interface{})
 		//If the configuration already exists - we replace only existing params
@@ -227,6 +239,46 @@ func readConfig() {
 				logger.Error("ERROR during mapstructure decode[1]:", err)
 			}
 			config.Setting.DATABASE_DATA = append(config.Setting.DATABASE_DATA, data)
+		}
+	}
+
+	//queries
+	if viper.IsSet("database_queries") {
+		config.Setting.DATABASE_QUERIES = nil
+		dataConfig := viper.Get("database_queries")
+		dataVal := dataConfig.([]interface{})
+		for idx := range dataVal {
+			val := dataVal[idx].(map[string]interface{})
+			data := config.PromCasaDataQuery{}
+			defaults.SetDefaults(&data) //<-- This set the defaults values
+			err := mapstructure.Decode(val, &data)
+			if err != nil {
+				logger.Error("ERROR during mapstructure decode[1]:", err)
+			}
+			config.Setting.DATABASE_QUERIES = append(config.Setting.DATABASE_QUERIES, data)
+		}
+	}
+
+	//We should do extraction and after sorting 0,1,2,3
+	sort.Ints(envParamsQueries[:])
+	//Here we do ENV check
+	for _, idx := range envParamsQueries {
+		value := allSettings[fmt.Sprintf("database_queries[%d]", idx)]
+		val := value.(map[string]interface{})
+		//If the configuration already exists - we replace only existing params
+		if len(config.Setting.DATABASE_QUERIES) > idx {
+			err := mapstructure.Decode(val, &config.Setting.DATABASE_QUERIES[idx])
+			if err != nil {
+				logger.Error("ERROR during mapstructure decode[0]:", err)
+			}
+		} else {
+			data := config.PromCasaDataQuery{}
+			defaults.SetDefaults(&data) //<-- This set the defaults values
+			err := mapstructure.Decode(val, &data)
+			if err != nil {
+				logger.Error("ERROR during mapstructure decode[1]:", err)
+			}
+			config.Setting.DATABASE_QUERIES = append(config.Setting.DATABASE_QUERIES, data)
 		}
 	}
 
