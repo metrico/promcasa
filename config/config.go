@@ -6,21 +6,21 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-var Setting ClokiWriterSettingServer
+var Setting PromCasaSettingServer
 
 //NAME
-var NAME_APPLICATION = "cloki-writer"
+var NAME_APPLICATION = "promcasa-writer"
 
 const (
 	FINGERPRINT_Bernstein = iota
 	FINGERPRINT_CityHash
 )
 
-type ClokiWriterDataBase struct {
-	User         string `json:"user" mapstructure:"user" default:"cloki_user"`
-	Node         string `json:"node" mapstructure:"node" default:"clokinode"`
-	Password     string `json:"pass" mapstructure:"pass" default:"cloki_pass"`
-	Name         string `json:"name" mapstructure:"name" default:"cloki_data"`
+type PromCasaDataBase struct {
+	User         string `json:"user" mapstructure:"user" default:"promcasa_user"`
+	Node         string `json:"node" mapstructure:"node" default:"promcasanode"`
+	Password     string `json:"pass" mapstructure:"pass" default:"promcasa_pass"`
+	Name         string `json:"name" mapstructure:"name" default:"promcasa_data"`
 	Host         string `json:"host" mapstructure:"host" default:"127.0.0.1"`
 	TableSamples string `json:"table_samples" mapstructure:"table_samples" default:"samples_v2"`
 	TableSeries  string `json:"table_series" mapstructure:"table_series" default:"time_series"`
@@ -34,16 +34,16 @@ type ClokiWriterDataBase struct {
 	Strategy     string `json:"strategy" mapstructure:"strategy" default:"failover"`
 }
 
-type ClokiWriterSettingServer struct {
+type PromCasaSettingServer struct {
 	SrartTime                time.Time `default:""`
 	FingerPrintType          uint      `default:"0"`
 	DataBaseStrategy         uint      `default:"0"`
 	CurrentDataBaseIndex     uint      `default:"0"`
 	DataDatabaseGroupNodeMap map[string][]string
 	Validate                 *validator.Validate
-	EnvPrefix                string `default:"CLOKI"`
+	EnvPrefix                string `default:"PROMCASA"`
 
-	DATABASE_DATA []ClokiWriterDataBase `json:"database_data" mapstructure:"database_data"`
+	DATABASE_DATA []PromCasaDataBase `json:"database_data" mapstructure:"database_data"`
 
 	SYSTEM_SETTINGS struct {
 		HostName             string  `json:"hostname" mapstructure:"hostname" default:"hostname"`
@@ -103,7 +103,7 @@ type ClokiWriterSettingServer struct {
 		RotationHours uint32 `json:"rotation_hours" mapstructure:"rotation_hours" default:"24"`
 		Path          string `json:"path" mapstructure:"path" default:"./"`
 		Level         string `json:"level" mapstructure:"level" default:"error"`
-		Name          string `json:"name" mapstructure:"name" default:"clokiwriter.log"`
+		Name          string `json:"name" mapstructure:"name" default:"promcasa.log"`
 		Stdout        bool   `json:"stdout" mapstructure:"stdout" default:"false"`
 		Json          bool   `json:"json" mapstructure:"json" default:"true"`
 		SysLogLevel   string `json:"syslog_level" mapstructure:"syslog_level" default:"LOG_INFO"`

@@ -64,7 +64,7 @@ func initFlags() {
 	appFlags.InitializeDB = flag.Bool("initialize_db", false, "initialize the database and create all tables")
 	appFlags.ShowHelpMessage = flag.Bool("help", false, "show help")
 	appFlags.ShowVersion = flag.Bool("version", false, "show version")
-	appFlags.ConfigPath = flag.String("config-path", "/usr/local/clokiwriter/etc", "the path to the clokiwriterapp config file")
+	appFlags.ConfigPath = flag.String("config-path", "/usr/local/promcasa/etc", "the path to the promcasaapp config file")
 	appFlags.LogName = flag.String("log-name", "", "the name prefix of the log file.")
 	appFlags.LogPath = flag.String("log-path", "", "the path for the log file.")
 
@@ -76,7 +76,7 @@ func main() {
 	//init flags
 	initFlags()
 
-	cfg := new(config.ClokiWriterSettingServer)
+	cfg := new(config.PromCasaSettingServer)
 	defaults.SetDefaults(cfg) //<-- This set the defaults values
 	config.Setting = *cfg
 
@@ -133,14 +133,14 @@ func checkHelpVersionFlags() {
 //https://github.com/jackwhelpton/fasthttp-routing
 func readConfig() {
 	// Getting constant values
-	if configEnv := os.Getenv("ClOKIWRITERAPPENV"); configEnv != "" {
-		viper.SetConfigName("cloki_writer_" + configEnv)
+	if configEnv := os.Getenv("PROMCASA_APPENV"); configEnv != "" {
+		viper.SetConfigName("promcasa_" + configEnv)
 	} else {
-		viper.SetConfigName("cloki_writer")
+		viper.SetConfigName("promcasa")
 	}
 	viper.SetConfigType("json")
 
-	if configPath := os.Getenv("ClOKIWRITERAPPPATH"); configPath != "" {
+	if configPath := os.Getenv("PROMCASA_APPPATH"); configPath != "" {
 		viper.AddConfigPath(configPath)
 	} else {
 		viper.AddConfigPath(*appFlags.ConfigPath)
@@ -155,7 +155,7 @@ func readConfig() {
 		logger.Error("No configuration file loaded - using defaults - checking env")
 	}
 
-	viper.SetConfigName("clokiwriter_custom")
+	viper.SetConfigName("promcasa_custom")
 	err = viper.MergeInConfig()
 	if err != nil {
 		logger.Debug("No custom configuration file loaded.")
@@ -197,7 +197,7 @@ func readConfig() {
 		dataVal := dataConfig.([]interface{})
 		for idx := range dataVal {
 			val := dataVal[idx].(map[string]interface{})
-			data := config.ClokiWriterDataBase{}
+			data := config.PromCasaDataBase{}
 			defaults.SetDefaults(&data) //<-- This set the defaults values
 			err := mapstructure.Decode(val, &data)
 			if err != nil {
@@ -220,7 +220,7 @@ func readConfig() {
 				logger.Error("ERROR during mapstructure decode[0]:", err)
 			}
 		} else {
-			data := config.ClokiWriterDataBase{}
+			data := config.PromCasaDataBase{}
 			defaults.SetDefaults(&data) //<-- This set the defaults values
 			err := mapstructure.Decode(val, &data)
 			if err != nil {
@@ -373,13 +373,11 @@ func performV1APIRouting(acc, accProm fiber.Router) {
 	//Prometheus
 	apirouterv1.RoutePromDataApis(acc, servicesObject.dataDBSession,
 		&servicesObject.databaseNodeMap, goCache)
-
 }
 
-//this function will check CLOKI_DATABASE_DATA and set internal bind for viper
-//i.e. CLOKI_DATABASE_DATA_0_HOSTNAME -> database_data[0].hostname
+//this function will check PROMCASA_DATABASE_DATA and set internal bind for viper
+//i.e. PROMCASA_DATABASE_DATA_0_HOSTNAME -> database_data[0].hostname
 func SetEnvironDataBase() bool {
-
 	var re = regexp.MustCompile(`_(\d)_`)
 	for _, s := range os.Environ() {
 		if strings.HasPrefix(s, config.Setting.EnvPrefix+"_DATABASE_DATA") {

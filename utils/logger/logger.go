@@ -92,11 +92,11 @@ func configureLocalFileSystemHook() {
 	logName := globalConfig.Setting.LOG_SETTINGS.Name
 	var err error
 
-	if configPath := os.Getenv("CLOKIAPPLOGPATH"); configPath != "" {
+	if configPath := os.Getenv("PROMCASA_APPLOGPATH"); configPath != "" {
 		logPath = configPath
 	}
 
-	if configName := os.Getenv("CLOKIAPPLOGNAME"); configName != "" {
+	if configName := os.Getenv("PROMCASA_APPLOGNAME"); configName != "" {
 		logName = configName
 	}
 
