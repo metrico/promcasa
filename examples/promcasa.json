@@ -1,0 +1,89 @@
+{
+  "database_data": [
+    {
+      "help": "Settings for Clickhouse Database (data)",
+      "user": "default",
+      "node": "local",
+      "pass": "",
+      "name": "loki",
+      "table_prefix": "",
+      "host": "127.0.0.1",
+      "_port": "9000",
+      "_read_timeout": 30,
+      "_write_timeout": 30,
+      "strategy": "failover",
+      "primary": true,
+      "debug": true
+    }
+  ],
+  "http_settings": {
+    "help": "Settings for the promcasa Webapp Server",
+    "host": "0.0.0.0",
+    "port": 3215,
+    "prefork": false,
+    "root": "/usr/local/promcasa/dist",
+    "gzip": true,
+    "gzip_static": true,
+    "api_prefix": "loki",
+    "debug":true,
+    "websocket": {
+      "enable": false
+    }
+  },
+  "https_settings": {
+    "help": "SSL settings for promcasa Webapp Server",
+    "enable": false,
+    "host": "0.0.0.0",
+    "port": 3201,
+    "min-tls-version": "TLS1.2",
+    "max-tls-version": "TLS1.4",
+    "http_redirect": false,
+    "cert": "/usr/local/promcasa/tls/cert.pem",
+    "key": "/usr/local/promcasa/tls/key.pem"
+  },
+  "http_connect": {
+    "_help": "connect timeout in seconds",
+    "connect_timeout": 10
+  },
+  "prometheus_client": {
+    "help": "Settings for internal Prometheus Client (optional)",
+    "allow_ip": ["127.0.0.1"],
+    "metrics_path": "/metrics",
+    "service_name": "prometheus",
+    "push_url": "",
+    "push_name": "",
+    "push_interval": 60,
+    "enable": false
+  },
+  "log_settings": {
+    "path": "/usr/local/promcasa/log",
+    "level": "debug",
+    "stdout": true,
+    "json": true,
+    "name": "promcasa-webapp.log",
+    "syslog": false,
+    "syslog_level": "LOG_INFO",
+    "syslog_uri": "",
+    "max_age_days": 7,
+    "rotation_hours": 24
+  },
+  "system_settings": {
+    "help": "Settings for promcasa logs",
+    "hostname": "home",
+    "url": "http://127.0.0.1",
+    "hash_type": "bernstein",
+    "uuid": "",
+    "db_bulk": 1000,
+    "db_timer": 2,
+    "buffer_size": 80000
+  },
+  "api_settings": {
+    "enable_token_access": true
+  },
+  "auth_settings": {
+    "_comment": "The type param can be internal, ldap",
+    "type": "internal",
+    "_help:token_expire": "the settings in minutes",
+    "token_expire": 1200
+  }
+}

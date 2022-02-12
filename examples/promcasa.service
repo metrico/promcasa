@@ -1,0 +1,19 @@
+
+# cp promcasa.service /etc/systemd/system/
+# systemctl daemon-reload
+# systemctl start promcasa
+# systemctl enable promcasa
+
+[Unit]
+Description=promcasa Application Server
+After=network.target
+
+[Service]
+Environment="PROMCASA_CONFIG=-config-path=/usr/local/promcasa/etc/"
+ExecStart=/usr/local/promcasa/bin/promcasa $PROMCASA_CONFIG
+Restart=always
+RestartSec=3s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
