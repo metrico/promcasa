@@ -48,7 +48,7 @@ func (ss *InsertService) RunWatcherConfigDatabaseStats() error {
 
 // this method create new user in the database
 // it doesn't check internally whether all the validation are applied or not
-func (ss *InsertService) DoQueries() error {
+func (ss *InsertService) DoMetricsQueries() error {
 
 	if !(*ss.DatabaseNodeMap)[config.Setting.CurrentDataBaseIndex].Online {
 		logger.Error("the node is offline:")

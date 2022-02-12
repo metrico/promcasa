@@ -39,7 +39,7 @@ func doMetricsScheduler(us *service.InsertService) {
 
 	for {
 		logger.Debug("Starting queries check")
-		us.DoQueries()
+		us.DoMetricsQueries()
 		time.Sleep(time.Duration(60) * time.Second)
 	}
 }
