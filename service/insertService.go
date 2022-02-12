@@ -40,6 +40,7 @@ type InsertService struct {
 func (ss *InsertService) InsertTimeSeries() {
 
 	wg := sync.WaitGroup{}
+	timerInterval, _ := time.ParseDuration(config.Setting.SYSTEM_SETTINGS.DBTimer)
 
 	for idx, tsCh := range ss.TSCh {
 		wg.Add(1)
@@ -54,7 +55,7 @@ func (ss *InsertService) InsertTimeSeries() {
 			sqlTS := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", (*ss.DatabaseNodeMap)[config.Setting.CurrentDataBaseIndex].TableSeries,
 				function.FieldName(function.DBFields(model.TableTimeSeries{})), function.FieldValue(function.DBFields(model.TableTimeSeries{})))
 
-			timer := time.NewTimer(time.Duration(config.Setting.SYSTEM_SETTINGS.DBTimer) * time.Second)
+			timer := time.NewTimer(timerInterval)
 			stop := func() {
 				if !timer.Stop() {
 					select {
@@ -115,7 +116,7 @@ func (ss *InsertService) InsertTimeSeries() {
 					}
 
 				case <-timer.C:
-					timer.Reset(time.Duration(config.Setting.SYSTEM_SETTINGS.DBTimer) * time.Second)
+					timer.Reset(timerInterval)
 					switch {
 					case tsCnt > 0:
 						err := txTS.Commit()
@@ -162,6 +163,7 @@ func (ss *InsertService) InsertTimeSeriesRequest(sample []*model.TableTimeSeries
 func (ss *InsertService) InsertSamples() {
 
 	wg := sync.WaitGroup{}
+	timerInterval, _ := time.ParseDuration(config.Setting.SYSTEM_SETTINGS.DBTimer)
 
 	for idx, spCh := range ss.SPCh {
 		wg.Add(1)
@@ -172,7 +174,7 @@ func (ss *InsertService) InsertSamples() {
 			var spCnt int
 			var err error
 
-			timer := time.NewTimer(time.Duration(config.Setting.SYSTEM_SETTINGS.DBTimer) * time.Second)
+			timer := time.NewTimer(timerInterval)
 			stop := func() {
 				if !timer.Stop() {
 					select {
@@ -230,7 +232,7 @@ func (ss *InsertService) InsertSamples() {
 					}
 
 				case <-timer.C:
-					timer.Reset(time.Duration(config.Setting.SYSTEM_SETTINGS.DBTimer) * time.Second)
+					timer.Reset(timerInterval)
 					switch {
 					case spCnt > 0:
 						err = txSP.Commit()

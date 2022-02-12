@@ -9,11 +9,21 @@
       "table_prefix": "",
       "host": "127.0.0.1",
       "_port": "9000",
-      "_read_timeout": 30,
-      "_write_timeout": 30,
+      "_read_timeout": "30s",
+      "_write_timeout": "30s",
       "strategy": "failover",
       "primary": true,
       "debug": true
+    }
+  ],
+  "database_queries": [
+    {
+      "help": "Query to database. Refesh takes unit sign: (ns, ms, s, m, h)",
+      "name": "my_status",
+      "query": "SELECT status, group, count(*) FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-60)) AND (datetime < toDateTime(now()) ) group by status, group",
+      "counter_position": 2,
+      "refresh": "60s",
+      "metrics":["g"]
     }
   ],
   "http_settings": {
@@ -43,7 +53,7 @@
   },
   "http_connect": {
     "_help": "connect timeout in seconds",
-    "connect_timeout": 10
+    "connect_timeout": "10s"
   },
   "prometheus_client": {
     "help": "Settings for internal Prometheus Client (optional)",
@@ -52,7 +62,7 @@
     "service_name": "prometheus",
     "push_url": "",
     "push_name": "",
-    "push_interval": 60,
+    "push_interval": "60s",
     "enable": false
   },
   "log_settings": {
@@ -74,7 +84,7 @@
     "hash_type": "bernstein",
     "uuid": "",
     "db_bulk": 1000,
-    "db_timer": 2,
+    "db_timer": "2s",
     "buffer_size": 80000
   },
   "api_settings": {
@@ -84,6 +94,6 @@
     "_comment": "The type param can be internal, ldap",
     "type": "internal",
     "_help:token_expire": "the settings in minutes",
-    "token_expire": 1200
+    "token_expire": "1200s"
   }
 }
