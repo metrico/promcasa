@@ -34,7 +34,6 @@
     "root": "/usr/local/promcasa/dist",
     "gzip": true,
     "gzip_static": true,
-    "api_prefix": "loki",
     "debug":true,
     "websocket": {
       "enable": false

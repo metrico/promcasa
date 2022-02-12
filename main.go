@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/metrico/promcasa/aggregator"
 	"github.com/metrico/promcasa/utils/helpers"
 	"github.com/metrico/promcasa/utils/promcasautils"
 
@@ -23,10 +24,8 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
-	apirouterv1 "github.com/metrico/promcasa/router"
 	"github.com/metrico/promcasa/utils/logger"
 	"github.com/mitchellh/mapstructure"
-	"github.com/patrickmn/go-cache"
 	"github.com/spf13/viper"
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -298,13 +297,6 @@ func readConfig() {
 func setFastConfigSettings() {
 
 	/***********************************/
-	switch config.Setting.SYSTEM_SETTINGS.HashType {
-	case "cityhash":
-		config.Setting.FingerPrintType = config.FINGERPRINT_CityHash
-	case "bernstein":
-	case "default":
-		config.Setting.FingerPrintType = config.FINGERPRINT_Bernstein
-	}
 
 	minVersion := config.Setting.HTTPS_SETTINGS.MinTLSVersionString
 
@@ -405,13 +397,7 @@ func configureAsHTTPServer() {
 	fractionLost.WithLabelValues("test").Inc()
 	*/
 
-	//Main
-	acc := serverFiber.Group(config.Setting.HTTP_SETTINGS.ApiPrefix + "/api/v1")
-
-	//Prometheus
-	accProm := serverFiber.Group(config.Setting.HTTP_SETTINGS.ApiPromPrefix + "/api")
-
-	performV1APIRouting(acc, accProm)
+	runSchedularPopulation()
 
 	if err := serverFiber.Listen(httpURL); err != nil {
 		panic(err)
@@ -419,16 +405,9 @@ func configureAsHTTPServer() {
 
 }
 
-func performV1APIRouting(acc, accProm fiber.Router) {
+func runSchedularPopulation() {
 
-	goCache := cache.New(30*time.Minute, 10*time.Minute)
-
-	apirouterv1.RouteInsertDataApis(acc, servicesObject.dataDBSession,
-		&servicesObject.databaseNodeMap, goCache)
-
-	//Prometheus
-	apirouterv1.RoutePromDataApis(acc, servicesObject.dataDBSession,
-		&servicesObject.databaseNodeMap, goCache)
+	aggregator.ActivateTimer(servicesObject.dataDBSession, &servicesObject.databaseNodeMap)
 }
 
 //this function will check PROMCASA_DATABASE_DATA and set internal bind for viper

@@ -10,7 +10,6 @@ import (
 	"github.com/metrico/promcasa/utils/helpers"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
 	"github.com/metrico/promcasa/service"
 	"github.com/metrico/promcasa/system/webmessages"
@@ -153,14 +152,6 @@ func (uc *InsertController) PushStream(ctx *fiber.Ctx) error {
 		}
 
 		logger.Debug("Label string: ", string(fingerByte))
-		logger.Debug("fingertype : ", config.Setting.FingerPrintType)
-
-		switch config.Setting.FingerPrintType {
-		case config.FINGERPRINT_CityHash:
-			fingerPrint = heputils.FingerprintLabelsCityHash(fingerByte)
-		case config.FINGERPRINT_Bernstein:
-			fingerPrint = uint64(heputils.FingerprintLabelsDJBHashPrometheus(fingerByte))
-		}
 
 		// if fingerprint was not found, lets insert into time_series
 		if _, found := uc.InsertService.GoCache.Get(fmt.Sprint(fingerPrint)); !found {

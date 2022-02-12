@@ -11,11 +11,6 @@ var Setting PromCasaSettingServer
 //NAME
 var NAME_APPLICATION = "promcasa"
 
-const (
-	FINGERPRINT_Bernstein = iota
-	FINGERPRINT_CityHash
-)
-
 type PromCasaDataBase struct {
 	User         string `json:"user" mapstructure:"user" default:"promcasa_user"`
 	Node         string `json:"node" mapstructure:"node" default:"promcasanode"`
@@ -44,7 +39,6 @@ type PromCasaDataQuery struct {
 
 type PromCasaSettingServer struct {
 	SrartTime                time.Time `default:""`
-	FingerPrintType          uint      `default:"0"`
 	DataBaseStrategy         uint      `default:"0"`
 	CurrentDataBaseIndex     uint      `default:"0"`
 	DataDatabaseGroupNodeMap map[string][]string
@@ -64,7 +58,6 @@ type PromCasaSettingServer struct {
 		BufferSizeTimeSeries uint32 `json:"buffer_size_timeseries" mapstructure:"buffer_size_timeseries" default:"200000"`
 		ChannelsSample       int    `json:"channels_sample" mapstructure:"channels_sample" default:"3"`
 		ChannelsTimeSeries   int    `json:"channels_timeseries" mapstructure:"channels_timeseries" default:"5"`
-		HashType             string `json:"hash_type" mapstructure:"hash_type" default:""`
 		CPUMaxProcs          int    `json:"cpu_max_procs" mapstructure:"cpu_max_procs" default:"1"`
 	} `json:"system_settings" mapstructure:"system_settings"`
 
@@ -79,15 +72,13 @@ type PromCasaSettingServer struct {
 	} `json:"api_settings" mapstructure:"api_settings"`
 
 	HTTP_SETTINGS struct {
-		Host          string `json:"host" mapstructure:"host" default:"0.0.0.0"`
-		Port          int    `json:"port" mapstructure:"port" default:"3200"`
-		ApiPrefix     string `json:"api_prefix" mapstructure:"api_prefix" default:""`
-		ApiPromPrefix string `json:"api_prom_prefix" mapstructure:"api_prom_prefix" default:""`
-		Prefork       bool   `json:"prefork" mapstructure:"prefork" default:"false"`
-		Gzip          bool   `json:"gzip" mapstructure:"gzip" default:"true"`
-		GzipStatic    bool   `json:"gzip_static" mapstructure:"gzip_static" default:"true"`
-		Debug         bool   `json:"debug" mapstructure:"debug" default:"false"`
-		WebSocket     struct {
+		Host       string `json:"host" mapstructure:"host" default:"0.0.0.0"`
+		Port       int    `json:"port" mapstructure:"port" default:"3200"`
+		Prefork    bool   `json:"prefork" mapstructure:"prefork" default:"false"`
+		Gzip       bool   `json:"gzip" mapstructure:"gzip" default:"true"`
+		GzipStatic bool   `json:"gzip_static" mapstructure:"gzip_static" default:"true"`
+		Debug      bool   `json:"debug" mapstructure:"debug" default:"false"`
+		WebSocket  struct {
 			Enable bool `json:"enable" mapstructure:"enable" default:"false"`
 		} `json:"websocket" mapstructure:"websocket"`
 		Enable bool `json:"enable" mapstructure:"enable" default:"true"`

@@ -12,9 +12,7 @@ import (
 	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
 	"github.com/metrico/promcasa/utils/function"
-	heputils "github.com/metrico/promcasa/utils/heputils"
 	"github.com/metrico/promcasa/utils/logger"
-	"github.com/patrickmn/go-cache"
 )
 
 type TableSamples struct {
@@ -29,7 +27,6 @@ type TableTimeSeriesReq struct {
 
 type InsertService struct {
 	ServiceData
-	GoCache         *cache.Cache
 	DatabaseNodeMap *[]model.DataDatabasesMap
 	TSCh            []chan *TableTimeSeriesReq
 	SPCh            []chan *TableSamples
@@ -258,88 +255,6 @@ func (ss *InsertService) InsertSamples() {
 	wg.Wait()
 }
 
-// this method checks the structure of incoming stream and create batch
-/*
-func (ss *InsertService) PushStream(req model.PushRequest) error {
-
-	for _, stream := range req.Streams {
-		labelsArr := strings.Split(stream.Labels[1:len(stream.Labels)-1], ",")
-
-		lbs := make([]model.Label, len(labelsArr))
-		labelKey := make([]string, len(labelsArr))
-
-		labelValue := make(map[string][]string)
-		for k, l := range labelsArr {
-			keyValue := strings.SplitN(l, "=", 2)
-			value, _ := strconv.Unquote(keyValue[1])
-			labelKey[k] = keyValue[0]
-			labelValue[keyValue[0]] = append(labelValue[keyValue[0]], value)
-			lbs[k] = model.Label{
-				Key:   keyValue[0],
-				Value: value,
-			}
-		}
-
-		// lets insert only the unique values for key
-		for k, v := range labelValue {
-			if keys, exist := ss.GoCache.Get(k); exist {
-				ss.GoCache.Replace(k, heputils.AppendTwoSlices(keys.([]string), heputils.UniqueSlice(v)), 0)
-			} else {
-				ss.GoCache.Add(k, heputils.UniqueSlice(v), 0)
-			}
-		}
-
-		sort.Slice(lbs[:], func(i, j int) bool {
-			return lbs[i].Key < lbs[j].Key
-		})
-
-		fingerPrint := heputils.FingerprintLabels(lbs)
-
-		// if fingerprint was not found, lets insert into time_series
-		if _, found := ss.GoCache.Get(fmt.Sprint(fingerPrint)); !found {
-			if keys, exist := ss.GoCache.Get("__LABEL__"); exist {
-				labelKeys := keys.([]string)
-				uniqueKeys := heputils.AppendTwoSlices(labelKeys, labelKey)
-				ss.GoCache.Replace("__LABEL__", uniqueKeys, 0)
-
-			} else {
-				ss.GoCache.Add("__LABEL__", labelKey, 0)
-			}
-
-			b := bytebufferpool.Get()
-
-			ss.GoCache.Set(fmt.Sprint(fingerPrint), true, cache.DefaultExpiration)
-
-			rand.Seed(time.Now().UnixNano())
-			index := rand.Intn(config.Setting.SYSTEM_SETTINGS.ChannelsTimeSeries - 0 + 1)
-
-			ss.TSCh[index] <- &model.TableTimeSeries{
-				Date:        time.Now(),
-				FingerPrint: fingerPrint,
-				Labels:      heputils.MakeJson(lbs, b),
-				Name:        "",
-			}
-
-		}
-
-		for _, _ = range stream.Entries {
-
-			rand.Seed(time.Now().UnixNano())
-			//index := rand.Intn(config.Setting.SYSTEM_SETTINGS.ChannelsSample - 0 + 1)
-
-			ss.SPCh[index] <- &model.TableSample{
-				FingerPrint: fingerPrint,
-				TimestampMS: time.Now().UnixNano() / 1000000,
-				Value:       0,
-				String:      entries.Line,
-			}
-
-		}
-	}
-	return nil
-}
-*/
-
 // this method create new user in the database
 // it doesn't check internally whether all the validation are applied or not
 func (ss *InsertService) ReloadFingerprints() error {
@@ -371,25 +286,6 @@ func (ss *InsertService) ReloadFingerprints() error {
 		for lk, lv := range lb.ChildrenMap() {
 			labelKey = append(labelKey, lk)
 			labelValue[lk] = append(labelValue[lk], lv.Data().(string))
-		}
-
-		// lets have only unique values for a label keys
-		for k, v := range labelValue {
-			if keys, exist := ss.GoCache.Get(k); exist {
-				ss.GoCache.Replace(k, heputils.AppendTwoSlices(keys.([]string), heputils.UniqueSlice(v)), 0)
-			} else {
-				ss.GoCache.Add(k, heputils.UniqueSlice(v), 0)
-			}
-		}
-
-		// lets have only unique label keys
-		if keys, exist := ss.GoCache.Get("__LABEL__"); exist {
-			labelKeys := keys.([]string)
-			uniqueKeys := heputils.AppendTwoSlices(labelKeys, labelKey)
-			ss.GoCache.Replace("__LABEL__", uniqueKeys, 0)
-
-		} else {
-			ss.GoCache.Add("__LABEL__", labelKey, 0)
 		}
 
 	}
