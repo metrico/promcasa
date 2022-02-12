@@ -9,7 +9,7 @@ import (
 var Setting PromCasaSettingServer
 
 //NAME
-var NAME_APPLICATION = "promcasa-writer"
+var NAME_APPLICATION = "promcasa"
 
 const (
 	FINGERPRINT_Bernstein = iota
