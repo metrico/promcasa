@@ -118,7 +118,7 @@ type ClokiWriterSettingServer struct {
 		PushName     string   `json:"push_name" mapstructure:"push_name" default:""`
 		ServiceName  string   `json:"service_name" mapstructure:"service_name" default:"prometheus"`
 		MetricsPath  string   `json:"metrics_path" mapstructure:"metrics_path" default:"/metrics"`
-		Enable       bool     `json:"enable" mapstructure:"enable" default:"false"`
+		Enable       bool     `json:"enable" mapstructure:"enable" default:"true"`
 		AllowIP      []string `json:"allow_ip" mapstructure:"allow_ip" default:"[127.0.0.1]"`
 	} `json:"prometheus_client" mapstructure:"prometheus_client"`
 }
