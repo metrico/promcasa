@@ -34,6 +34,6 @@ To provision a metrics bucket, extend the configuration with a new query feed:
       "labels": ["status","group"], // must match columns
       "counter_name": "counter",
       "refresh": "60s", //  Refesh takes unit sign: (ns, ms, s, m, h)
-      "type":["g"] // gauge
+      "type":"gauge" // gauge
     }
 ```
