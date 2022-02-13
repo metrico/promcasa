@@ -31,13 +31,14 @@ type PromCasaDataBase struct {
 }
 
 type PromCasaMetrics struct {
-	Name          string   `json:"name" mapstructure:"name" default:""`
-	Help          string   `json:"help" mapstructure:"help" default:""`
-	Query         string   `json:"query" mapstructure:"query" default:""`
-	CounterName   string   `json:"counter_name" mapstructure:"counter_name" default:"counter"`
-	RefreshString string   `json:"refresh" mapstructure:"refresh" default:"60s"`
-	MetricType    string   `json:"type" mapstructure:"type" default:"gauge"`
-	MetricLabels  []string `json:"labels" mapstructure:"labels" default:"gauge"`
+	Name           string   `json:"name" mapstructure:"name" default:""`
+	Help           string   `json:"help" mapstructure:"help" default:""`
+	Query          string   `json:"query" mapstructure:"query" default:""`
+	CounterName    string   `json:"counter_name" mapstructure:"counter_name" default:"counter"`
+	RefreshString  string   `json:"refresh" mapstructure:"refresh" default:"60s"`
+	MetricType     string   `json:"type" mapstructure:"type" default:"gauge"`
+	MetricLiveView bool     `json:"live_view" mapstructure:"live_view" default:"false"`
+	MetricLabels   []string `json:"labels" mapstructure:"labels" default:"gauge"`
 }
 
 type PromCasaSettingServer struct {
@@ -48,6 +49,8 @@ type PromCasaSettingServer struct {
 	Validate                 *validator.Validate
 	EnvPrefix                string `default:"PROMCASA"`
 	PromGaugeMap             map[string]*prometheus.GaugeVec
+	PromHistogramMap         map[string]*prometheus.HistogramVec
+	PromCounterMap           map[string]*prometheus.CounterVec
 
 	DATABASE_DATA    []PromCasaDataBase `json:"database_data" mapstructure:"database_data"`
 	DATABASE_METRICS []PromCasaMetrics  `json:"database_metrics" mapstructure:"database_metrics"`

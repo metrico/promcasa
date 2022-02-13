@@ -61,6 +61,11 @@ func (ss *InsertService) DoMetricsQueries() error {
 
 		dbIndex := config.Setting.CurrentDataBaseIndex
 
+		if qObj.MetricLiveView {
+			logger.Debug("This is live view, skip it")
+			continue
+		}
+
 		logger.Debug("Execute query: ", index)
 
 		future := async.ExecAsyncSql(func(lIndex uint, qIndex int) model.AsyncSqlResult {
@@ -161,6 +166,73 @@ func (ss *InsertService) DoMetricsQueries() error {
 					}
 
 					gaugeVec.With(labels).Set(counter)
+				}
+			}
+		} else if promCasaMetric.MetricType == "histogram" {
+			var histogramVec *prometheus.HistogramVec
+			if histogramVec, ok = config.Setting.PromHistogramMap[promCasaMetric.Name]; ok {
+				//do something here
+			} else {
+				config.Setting.PromHistogramMap[promCasaMetric.Name] = promauto.NewHistogramVec(prometheus.HistogramOpts{
+					Name:    promCasaMetric.Name,
+					Help:    promCasaMetric.Help,
+					Buckets: []float64{0.01, 0.02, 0.05, 0.1},
+				},
+					promCasaMetric.MetricLabels)
+
+				histogramVec = config.Setting.PromHistogramMap[promCasaMetric.Name]
+
+			}
+
+			for _, value := range data.Children() {
+
+				var counter float64
+				labels := prometheus.Labels{}
+
+				for _, label := range promCasaMetric.MetricLabels {
+
+					if value.Exists(label) {
+						labels[label] = value.S(label).Data().(string)
+					}
+
+					if value.Exists(promCasaMetric.CounterName) {
+						counter = value.S(promCasaMetric.Name).Data().(float64)
+					}
+
+					histogramVec.With(labels).Observe(counter)
+				}
+			}
+		} else if promCasaMetric.MetricType == "counter" {
+			var counterVec *prometheus.CounterVec
+			if counterVec, ok = config.Setting.PromCounterMap[promCasaMetric.Name]; ok {
+				//do something here
+			} else {
+				config.Setting.PromCounterMap[promCasaMetric.Name] = promauto.NewCounterVec(prometheus.CounterOpts{
+					Name: promCasaMetric.Name,
+					Help: promCasaMetric.Help,
+				},
+					promCasaMetric.MetricLabels)
+
+				counterVec = config.Setting.PromCounterMap[promCasaMetric.Name]
+
+			}
+
+			for _, value := range data.Children() {
+
+				var counter float64
+				labels := prometheus.Labels{}
+
+				for _, label := range promCasaMetric.MetricLabels {
+
+					if value.Exists(label) {
+						labels[label] = value.S(label).Data().(string)
+					}
+
+					if value.Exists(promCasaMetric.CounterName) {
+						counter = value.S(promCasaMetric.Name).Data().(float64)
+					}
+
+					counterVec.With(labels).Add(counter)
 				}
 			}
 		}
