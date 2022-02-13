@@ -25,7 +25,7 @@
       "labels": ["status","group"],
       "counter_name": "counter",
       "refresh": "60s",
-      "type":["g"]
+      "type":"gauge"
     }
   ],
   "http_settings": {
