@@ -6,7 +6,8 @@ ClickHouse Custom Metrics Exporter for Prometheus Scrapers
 
 <br />
 
-<img src="https://user-images.githubusercontent.com/1423657/137605775-485de1af-20a1-47ae-933e-b91b9e08edb1.png" width=500 />
+<img src="https://user-images.githubusercontent.com/1423657/153759412-bab0e246-4770-4fe4-b301-f48113c6b9d7.png" width=400 />
+
 
 #### :star: ClickHeus Functionality
 
