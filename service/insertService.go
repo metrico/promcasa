@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/ClickHouse/clickhouse-go"
 	"github.com/Jeffail/gabs/v2"
@@ -66,14 +67,16 @@ func (ss *InsertService) DoMetricsQueries() error {
 			continue
 		}
 
-		logger.Debug("Execute query: ", index)
+		refreshTimeout, _ := time.ParseDuration(qObj.RefreshString)
+		sqlQuery := strings.Replace(qObj.Query, "$refresh", fmt.Sprintf("interval %d SECOND", int(refreshTimeout.Seconds())), -1)
+		logger.Debug("Execute query: ", index, sqlQuery)
 
-		future := async.ExecAsyncSql(func(lIndex uint, qIndex int) model.AsyncSqlResult {
+		future := async.ExecAsyncSql(func(query string, lIndex uint, qIndex int) model.AsyncSqlResult {
 			logger.Debug("Execute Async process on node: ", lIndex, qIndex)
 			result := model.AsyncSqlResult{QueryIndex: qIndex}
-			result.Rows, result.Err = ss.Session[lIndex].Queryx(qObj.Query) // (*sql.Rows, error)
+			result.Rows, result.Err = ss.Session[lIndex].Queryx(query) // (*sql.Rows, error)
 			return result
-		}, dbIndex, index)
+		}, sqlQuery, dbIndex, index)
 
 		ResultFuture = append(ResultFuture, future)
 	}

@@ -18,10 +18,10 @@
   ],
   "database_metrics": [
     {
-      "_info": "Query to database. Refesh takes unit sign: (ns, ms, s, m, h)",
+      "_info": "Query to database. Refesh takes unit sign: (ns, ms, s, m, h). $refresh - this is a reference for 'refresh' param ",
       "name": "my_status",
       "help": "My Status",
-      "query": "SELECT status, group, count(*) FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-60)) AND (datetime < toDateTime(now()) ) group by status, group",
+      "query": "SELECT status, group, count(*) FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-$refresh)) AND (datetime < toDateTime(now()) ) group by status, group",
       "labels": ["status","group"],
       "counter_name": "counter",
       "refresh": "60s",
