@@ -31,14 +31,16 @@ type PromCasaDataBase struct {
 }
 
 type PromCasaMetrics struct {
-	Name           string   `json:"name" mapstructure:"name" default:""`
-	Help           string   `json:"help" mapstructure:"help" default:""`
-	Query          string   `json:"query" mapstructure:"query" default:""`
-	CounterName    string   `json:"counter_name" mapstructure:"counter_name" default:"counter"`
-	RefreshString  string   `json:"refresh" mapstructure:"refresh" default:"60s"`
-	MetricType     string   `json:"type" mapstructure:"type" default:"gauge"`
-	MetricLiveView bool     `json:"live_view" mapstructure:"live_view" default:"false"`
-	MetricLabels   []string `json:"labels" mapstructure:"labels" default:"gauge"`
+	Name           string        `json:"name" mapstructure:"name" default:""`
+	Help           string        `json:"help" mapstructure:"help" default:""`
+	Query          string        `json:"query" mapstructure:"query" default:""`
+	CounterName    string        `json:"counter_name" mapstructure:"counter_name" default:"counter"`
+	RefreshString  string        `json:"refresh" mapstructure:"refresh" default:"60s"`
+	MetricType     string        `json:"type" mapstructure:"type" default:"gauge"`
+	MetricLiveView bool          `json:"live_view" mapstructure:"live_view" default:"false"`
+	MetricLabels   []string      `json:"labels" mapstructure:"labels" default:"gauge"`
+	LastTime       time.Time     `json:"last_time" default:""`
+	RefreshTimeout time.Duration `json:"refresh_timeout" default:""`
 }
 
 type PromCasaSettingServer struct {
@@ -64,6 +66,7 @@ type PromCasaSettingServer struct {
 		BufferSizeSample     uint32 `json:"buffer_size_sample" mapstructure:"buffer_size_sample" default:"200000"`
 		BufferSizeTimeSeries uint32 `json:"buffer_size_timeseries" mapstructure:"buffer_size_timeseries" default:"200000"`
 		CPUMaxProcs          int    `json:"cpu_max_procs" mapstructure:"cpu_max_procs" default:"1"`
+		SystemRefreshCheck   string `json:"system_refresh" mapstructure:"system_refresh" default:"10s"`
 	} `json:"system_settings" mapstructure:"system_settings"`
 
 	AUTH_SETTINGS struct {

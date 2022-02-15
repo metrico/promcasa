@@ -86,7 +86,8 @@
     "uuid": "",
     "db_bulk": 1000,
     "db_timer": "2s",
-    "buffer_size": 80000
+    "buffer_size": 80000,
+    "system_refresh": "10s"
   },
   "api_settings": {
     "enable_token_access": true

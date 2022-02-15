@@ -281,6 +281,11 @@ func readConfig() {
 		}
 	}
 
+	//Set to 0
+	for index, qObj := range config.Setting.DATABASE_METRICS {
+		config.Setting.DATABASE_METRICS[index].RefreshTimeout, _ = time.ParseDuration(qObj.RefreshString)
+	}
+
 	//Check the command line
 	if *appFlags.LogName != "" {
 		config.Setting.LOG_SETTINGS.Name = *appFlags.LogName

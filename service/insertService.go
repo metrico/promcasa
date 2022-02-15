@@ -56,6 +56,8 @@ func (ss *InsertService) DoMetricsQueries() error {
 		return fmt.Errorf("the node is offline")
 	}
 
+	currentDateTime := time.Now()
+
 	var ResultFuture []async.Future
 
 	for index, qObj := range config.Setting.DATABASE_METRICS {
@@ -67,8 +69,12 @@ func (ss *InsertService) DoMetricsQueries() error {
 			continue
 		}
 
-		refreshTimeout, _ := time.ParseDuration(qObj.RefreshString)
-		sqlQuery := strings.Replace(qObj.Query, "$refresh", fmt.Sprintf("interval %d SECOND", int(refreshTimeout.Seconds())), -1)
+		if qObj.LastTime.Add(qObj.RefreshTimeout).After(currentDateTime) {
+			logger.Debug("Not yet.....")
+			continue
+		}
+
+		sqlQuery := strings.Replace(qObj.Query, "$refresh", fmt.Sprintf("interval %d SECOND", int(qObj.RefreshTimeout.Seconds())), -1)
 		logger.Debug("Execute query: ", index, sqlQuery)
 
 		future := async.ExecAsyncSql(func(query string, lIndex uint, qIndex int) model.AsyncSqlResult {
@@ -77,6 +83,8 @@ func (ss *InsertService) DoMetricsQueries() error {
 			result.Rows, result.Err = ss.Session[lIndex].Queryx(query) // (*sql.Rows, error)
 			return result
 		}, sqlQuery, dbIndex, index)
+
+		config.Setting.DATABASE_METRICS[index].LastTime = currentDateTime
 
 		ResultFuture = append(ResultFuture, future)
 	}
@@ -116,7 +124,7 @@ func (ss *InsertService) DoMetricsQueries() error {
 				default:
 					// use this to find the type for the field
 					// you need to change
-					// log.Printf("%v: %T", column.Name(), v)
+					//logger.Debug("%v: %T", column.Name(), v)
 				}
 
 				nn := strings.Replace(column.Name(), ".", "->", -1)
@@ -126,9 +134,9 @@ func (ss *InsertService) DoMetricsQueries() error {
 
 			err = rows.Scan(values...)
 			if err != nil {
-				objects = append(objects, object)
-			} else {
 				logger.Error("found error during scan of object:", err.Error())
+			} else {
+				objects = append(objects, object)
 			}
 		}
 
@@ -144,6 +152,11 @@ func (ss *InsertService) DoMetricsQueries() error {
 			if gaugeVec, ok = config.Setting.PromGaugeMap[promCasaMetric.Name]; ok {
 				//do something here
 			} else {
+
+				if config.Setting.PromGaugeMap == nil {
+					config.Setting.PromGaugeMap = make(map[string]*prometheus.GaugeVec)
+				}
+
 				config.Setting.PromGaugeMap[promCasaMetric.Name] = promauto.NewGaugeVec(prometheus.GaugeOpts{
 					Name: promCasaMetric.Name,
 					Help: promCasaMetric.Help},
@@ -163,19 +176,24 @@ func (ss *InsertService) DoMetricsQueries() error {
 					if value.Exists(label) {
 						labels[label] = value.S(label).Data().(string)
 					}
-
-					if value.Exists(promCasaMetric.CounterName) {
-						counter = value.S(promCasaMetric.Name).Data().(float64)
-					}
-
-					gaugeVec.With(labels).Set(counter)
 				}
+
+				if value.Exists(promCasaMetric.CounterName) && value.S(promCasaMetric.CounterName).Data() != nil {
+					counter = value.S(promCasaMetric.CounterName).Data().(float64)
+				}
+
+				gaugeVec.With(labels).Set(counter)
 			}
 		} else if promCasaMetric.MetricType == "histogram" {
 			var histogramVec *prometheus.HistogramVec
 			if histogramVec, ok = config.Setting.PromHistogramMap[promCasaMetric.Name]; ok {
 				//do something here
 			} else {
+
+				if config.Setting.PromHistogramMap == nil {
+					config.Setting.PromHistogramMap = make(map[string]*prometheus.HistogramVec)
+				}
+
 				config.Setting.PromHistogramMap[promCasaMetric.Name] = promauto.NewHistogramVec(prometheus.HistogramOpts{
 					Name:    promCasaMetric.Name,
 					Help:    promCasaMetric.Help,
@@ -197,19 +215,24 @@ func (ss *InsertService) DoMetricsQueries() error {
 					if value.Exists(label) {
 						labels[label] = value.S(label).Data().(string)
 					}
-
-					if value.Exists(promCasaMetric.CounterName) {
-						counter = value.S(promCasaMetric.Name).Data().(float64)
-					}
-
-					histogramVec.With(labels).Observe(counter)
 				}
+
+				if value.Exists(promCasaMetric.CounterName) && value.S(promCasaMetric.CounterName).Data() != nil {
+					counter = value.S(promCasaMetric.CounterName).Data().(float64)
+				}
+
+				histogramVec.With(labels).Observe(counter)
 			}
 		} else if promCasaMetric.MetricType == "counter" {
 			var counterVec *prometheus.CounterVec
 			if counterVec, ok = config.Setting.PromCounterMap[promCasaMetric.Name]; ok {
 				//do something here
 			} else {
+
+				if config.Setting.PromCounterMap == nil {
+					config.Setting.PromCounterMap = make(map[string]*prometheus.CounterVec)
+				}
+
 				config.Setting.PromCounterMap[promCasaMetric.Name] = promauto.NewCounterVec(prometheus.CounterOpts{
 					Name: promCasaMetric.Name,
 					Help: promCasaMetric.Help,
@@ -230,13 +253,12 @@ func (ss *InsertService) DoMetricsQueries() error {
 					if value.Exists(label) {
 						labels[label] = value.S(label).Data().(string)
 					}
-
-					if value.Exists(promCasaMetric.CounterName) {
-						counter = value.S(promCasaMetric.Name).Data().(float64)
-					}
-
-					counterVec.With(labels).Add(counter)
 				}
+
+				if value.Exists(promCasaMetric.CounterName) && value.S(promCasaMetric.CounterName).Data() != nil {
+					counter = value.S(promCasaMetric.CounterName).Data().(float64)
+				}
+				counterVec.With(labels).Add(counter)
 			}
 		}
 

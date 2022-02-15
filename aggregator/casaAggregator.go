@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
 	"github.com/metrico/promcasa/service"
 	"github.com/metrico/promcasa/utils/logger"
@@ -21,7 +22,7 @@ func ActivateTimer(dataSession []*sqlx.DB, databaseNodeMap *[]model.DataDatabase
 	go doConfigDabaseStats(&insertService)
 
 	//Check query status
-	doMetricsScheduler(&insertService)
+	go doMetricsScheduler(&insertService)
 }
 
 // make a ping keep alive
@@ -37,9 +38,11 @@ func doConfigDabaseStats(us *service.InsertService) {
 // make a ping keep alive
 func doMetricsScheduler(us *service.InsertService) {
 
+	refreshTimeout, _ := time.ParseDuration(config.Setting.SYSTEM_SETTINGS.SystemRefreshCheck)
+
 	for {
 		logger.Debug("Starting queries check")
 		us.DoMetricsQueries()
-		time.Sleep(time.Duration(60) * time.Second)
+		time.Sleep(refreshTimeout)
 	}
 }
