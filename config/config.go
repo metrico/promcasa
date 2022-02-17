@@ -120,13 +120,15 @@ type PromCasaSettingServer struct {
 	} `json:"log_settings" mapstructure:"log_settings"`
 
 	PROMETHEUS_CLIENT struct {
-		PushURL      string   `json:"push_url" mapstructure:"push_url" default:""`
-		TargetIP     string   `json:"target_ip" mapstructure:"target_ip" default:""`
-		PushInterval string   `json:"push_interval" mapstructure:"push_interval" default:"60s"`
-		PushName     string   `json:"push_name" mapstructure:"push_name" default:""`
-		ServiceName  string   `json:"service_name" mapstructure:"service_name" default:"prometheus"`
-		MetricsPath  string   `json:"metrics_path" mapstructure:"metrics_path" default:"/metrics"`
-		Enable       bool     `json:"enable" mapstructure:"enable" default:"true"`
-		AllowIP      []string `json:"allow_ip" mapstructure:"allow_ip" default:"[127.0.0.1]"`
+		PushURL          string   `json:"push_url" mapstructure:"push_url" default:""`
+		TargetIP         string   `json:"target_ip" mapstructure:"target_ip" default:""`
+		EnablePush       bool     `json:"push_enable" mapstructure:"push_enable" default:"true"`
+		PushInterval     string   `json:"push_interval" mapstructure:"push_interval" default:"60s"`
+		PushName         string   `json:"push_name" mapstructure:"push_name" default:""`
+		ServiceName      string   `json:"service_name" mapstructure:"service_name" default:"prometheus"`
+		MetricsPath      string   `json:"metrics_path" mapstructure:"metrics_path" default:"/metrics"`
+		Enable           bool     `json:"enable" mapstructure:"enable" default:"true"`
+		AllowIP          []string `json:"allow_ip" mapstructure:"allow_ip" default:"[127.0.0.1]"`
+		QueueJobELements uint32   `json:"queue_size" mapstructure:"queue_size" default:"5000"`
 	} `json:"prometheus_client" mapstructure:"prometheus_client"`
 }

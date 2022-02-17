@@ -12,6 +12,7 @@ import (
 	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
 	"github.com/metrico/promcasa/utils/async"
+	"github.com/metrico/promcasa/utils/jobqueue"
 	"github.com/metrico/promcasa/utils/logger"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -149,10 +150,7 @@ func (ss *InsertService) DoMetricsQueries() error {
 		var ok bool
 		if promCasaMetric.MetricType == "gauge" {
 			var gaugeVec *prometheus.GaugeVec
-			if gaugeVec, ok = config.Setting.PromGaugeMap[promCasaMetric.Name]; ok {
-				//do something here
-			} else {
-
+			if gaugeVec, ok = config.Setting.PromGaugeMap[promCasaMetric.Name]; !ok {
 				if config.Setting.PromGaugeMap == nil {
 					config.Setting.PromGaugeMap = make(map[string]*prometheus.GaugeVec)
 				}
@@ -184,11 +182,15 @@ func (ss *InsertService) DoMetricsQueries() error {
 
 				gaugeVec.With(labels).Set(counter)
 			}
+
+			//if push has been enabled
+			if config.Setting.PROMETHEUS_CLIENT.EnablePush {
+				jobqueue.SendJob(promCasaMetric.Name, jobqueue.GaugeType)
+			}
+
 		} else if promCasaMetric.MetricType == "histogram" {
 			var histogramVec *prometheus.HistogramVec
-			if histogramVec, ok = config.Setting.PromHistogramMap[promCasaMetric.Name]; ok {
-				//do something here
-			} else {
+			if histogramVec, ok = config.Setting.PromHistogramMap[promCasaMetric.Name]; !ok {
 
 				if config.Setting.PromHistogramMap == nil {
 					config.Setting.PromHistogramMap = make(map[string]*prometheus.HistogramVec)
@@ -223,11 +225,15 @@ func (ss *InsertService) DoMetricsQueries() error {
 
 				histogramVec.With(labels).Observe(counter)
 			}
+
+			//if push has been enabled
+			if config.Setting.PROMETHEUS_CLIENT.EnablePush {
+				jobqueue.SendJob(promCasaMetric.Name, jobqueue.HistogramType)
+			}
+
 		} else if promCasaMetric.MetricType == "counter" {
 			var counterVec *prometheus.CounterVec
-			if counterVec, ok = config.Setting.PromCounterMap[promCasaMetric.Name]; ok {
-				//do something here
-			} else {
+			if counterVec, ok = config.Setting.PromCounterMap[promCasaMetric.Name]; !ok {
 
 				if config.Setting.PromCounterMap == nil {
 					config.Setting.PromCounterMap = make(map[string]*prometheus.CounterVec)
@@ -262,6 +268,10 @@ func (ss *InsertService) DoMetricsQueries() error {
 			}
 		}
 
+		//if push has been enabled
+		if config.Setting.PROMETHEUS_CLIENT.EnablePush {
+			jobqueue.SendJob(promCasaMetric.Name, jobqueue.CounterType)
+		}
 	}
 
 	return nil

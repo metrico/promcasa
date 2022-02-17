@@ -15,6 +15,7 @@ import (
 
 	"github.com/metrico/promcasa/aggregator"
 	"github.com/metrico/promcasa/utils/helpers"
+	"github.com/metrico/promcasa/utils/jobqueue"
 	"github.com/metrico/promcasa/utils/promcasautils"
 
 	"github.com/ClickHouse/clickhouse-go"
@@ -109,6 +110,11 @@ func main() {
 	if len(servicesObject.dataDBSession) == 0 {
 		promcasautils.Colorize(promcasautils.ColorRed, "\r\nWe don't have any active DB session configured. Please check your config\r\n")
 		os.Exit(0)
+	}
+
+	/* init job push queue channel */
+	if config.Setting.PROMETHEUS_CLIENT.EnablePush {
+		jobqueue.InitQueue(config.Setting.PROMETHEUS_CLIENT.QueueJobELements)
 	}
 
 	//Api
