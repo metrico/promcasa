@@ -40,6 +40,28 @@ jobs:
         timeZone: 0
         format: 'YYYYMMDDHHmmss'
         
+    - name: NFPM DEB
+      if: github.event_name != 'pull_request'
+      uses: skynet-core/nfpm@v1.4
+      id: deb-package
+      env:
+        VERSION: ${{ env.TAG_NAME }}
+      with:
+       target: promcasa_v${{ env.TAG_NAME }}.deb
+       config: "examples/promcasa.yaml"
+       packager: "deb"
+       
+    - name: NFPM RPM
+      if: github.event_name != 'pull_request'
+      uses: skynet-core/nfpm@v1.4
+      id: rpm-package
+      env:
+        VERSION: ${{ env.TAG_NAME }}
+      with:
+       target: promcasa_v${{ env.TAG_NAME }}.rpm
+       config: "examples/promcasa.yaml"
+       packager: "rpm"
+        
     - name: Upload release
       if: github.event_name != 'pull_request'
       uses: boxpositron/upload-multiple-releases@1.0.7
