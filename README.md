@@ -18,9 +18,18 @@
 
 ---
 
+### Instructions
+Download a [binary release](https://github.com/metrico/promcasa/releases/) or build from source
+
+
+#### 📦 Download Binary
+```
+curl -fsSL github.com/metrico/promcasa/releases/latest/download/promcasa -O && chmod +x promcasa
+```
+
 #### :page_facing_up:	Configuration
 
-**PromCasa** acts according to the parameters configured in the `promcasa.json` file.
+**PromCasa** acts according to the query bucket parameters configured in `/etc/promcasa.json`
 
 
 ##### :bucket: Query Buckets
