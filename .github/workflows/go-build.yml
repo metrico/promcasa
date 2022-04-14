@@ -3,6 +3,8 @@ name: Builder
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - '**.md'
   pull_request:
     branches: [ main ]
 
@@ -18,5 +20,31 @@ jobs:
       with:
         go-version: 1.17
 
-    - name: Build
+    - name: Build App
       run: CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o promcasa
+      
+    - name: Get Version Tag
+      run: |
+         echo TAG_NAME=$(cat version.go | grep VERSION | awk -F'"' '{print $2}') >> $GITHUB_ENV
+         
+    - name: Get Time Tag
+      if: github.event_name != 'pull_request'
+      id: time
+      uses: nanzm/get-time-action@v1.1
+      with:
+        timeZone: 0
+        format: 'YYYYMMDDHHmmss'
+        
+    - name: Upload release
+      if: github.event_name != 'pull_request'
+      uses: boxpositron/upload-multiple-releases@1.0.7
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_config: |
+            promcasa
+        tag_name: v${{ steps.time.outputs.time }}
+        release_name: promcasa_v${{ env.TAG_NAME }}_${{ steps.time.outputs.time }}
+        draft: false
+        prerelease: false
+        overwrite: true
