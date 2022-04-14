@@ -137,7 +137,7 @@ func configureSyslogHook() {
 
 	sevceritySyslog := getSevirtyByName(globalConfig.Setting.LOG_SETTINGS.SysLogLevel)
 
-	syslogger, err := syslog.New(sevceritySyslog, "hepic-app-server")
+	syslogger, err := syslog.New(sevceritySyslog, "promcasa-service")
 
 	//hook, err := lSyslog.NewSyslogHook(proto, logSyslogUri, sevceritySyslog, "")
 
