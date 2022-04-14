@@ -32,7 +32,7 @@ curl -fsSL github.com/metrico/promcasa/releases/latest/download/promcasa -O && c
 **PromCasa** acts according to the query bucket parameters configured in `/etc/promcasa.json`
 
 
-##### :bucket: Query Buckets
+##### ▶️ Query Buckets
 To provision and publish a new metrics bucket, extend the configuration with a query set:
 ```javascript
 {
