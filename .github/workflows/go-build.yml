@@ -48,7 +48,7 @@ jobs:
         VERSION: ${{ env.TAG_NAME }}
       with:
        target: promcasa_v${{ env.TAG_NAME }}.deb
-       config: "examples/promcasa.yaml"
+       config: "examples/promcasa.yml"
        packager: "deb"
        
     - name: NFPM RPM
@@ -59,7 +59,7 @@ jobs:
         VERSION: ${{ env.TAG_NAME }}
       with:
        target: promcasa_v${{ env.TAG_NAME }}.rpm
-       config: "examples/promcasa.yaml"
+       config: "examples/promcasa.yml"
        packager: "rpm"
         
     - name: Upload release
