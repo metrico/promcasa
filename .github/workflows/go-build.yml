@@ -23,6 +23,11 @@ jobs:
     - name: Build App
       run: CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o promcasa
       
+    - name: Compress App
+      run: |
+        strip promcasa
+        upx promcasa
+        
     - name: Get Version Tag
       run: |
          echo TAG_NAME=$(cat version.go | grep VERSION | awk -F'"' '{print $2}') >> $GITHUB_ENV
