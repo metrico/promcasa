@@ -70,6 +70,8 @@ jobs:
       with:
         release_config: |
             promcasa
+            promcasa_v${{ env.TAG_NAME }}.deb
+            promcasa_v${{ env.TAG_NAME }}.rpm
         tag_name: v${{ steps.time.outputs.time }}
         release_name: promcasa_v${{ env.TAG_NAME }}_${{ steps.time.outputs.time }}
         draft: false
