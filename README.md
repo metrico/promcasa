@@ -2,7 +2,7 @@
 
 # PromCasa
 
-**ClickHouse** Custom Metrics Exporter for Prometheus. _Query, Aggregate and Publish from ClickHouse in zero time._
+ _Query, Aggregate and Publish_ anything from **ClickHouse** to **Prometheus** metrics in _zero time_
 
 <br />
 
@@ -46,3 +46,7 @@ To provision and publish a new metrics bucket, extend the configuration with a q
    "type":"gauge" // gauge
 }
 ```
+<br>
+
+## License
+ ©️ [qxip/metrico](https://metrico.in) Licensed under AGPLv3 as part of [cLoki](https://cloki.org)
