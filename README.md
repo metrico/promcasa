@@ -1,8 +1,8 @@
-<img src="https://user-images.githubusercontent.com/1423657/153759243-d950b5fa-d2a7-49b7-894c-cfd9c9531f82.png" width=100 />
+<img src="https://user-images.githubusercontent.com/1423657/153759243-d950b5fa-d2a7-49b7-894c-cfd9c9531f82.png" width=140 />
 
 # PromCasa
 
-ClickHouse Custom Metrics Exporter for Prometheus Scrapers
+ClickHouse Custom Metrics Exporter for Prometheus Scrapers. _Query, Aggregate and Publish metrics in zero time._
 
 <br />
 
@@ -20,20 +20,20 @@ ClickHouse Custom Metrics Exporter for Prometheus Scrapers
 
 #### :page_facing_up:	Configuration
 
-Clickheus acts according to the parameters configured in the `promcasa.json` file.
+PromCasa acts according to the parameters configured in the `promcasa.json` file.
 
 
 ##### Query Buckets
-To provision a metrics bucket, extend the configuration with a new query feed:
-```
- {
-      "_info": "Custom Metrics from Clickhouse",
-      "name": "my_status", // must be unique
-      "help": "My Status",
-      "query": "SELECT status, group, count(*) as counter FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-60)) AND (datetime < toDateTime(now()) ) group by status, group",
-      "labels": ["status","group"], // must match columns
-      "counter_name": "counter",
-      "refresh": "60s", //  Refesh takes unit sign: (ns, ms, s, m, h)
-      "type":"gauge" // gauge
-    }
+To provision and publish a new metrics bucket, extend the configuration with a query set:
+```javascript
+{
+   "_info": "Custom Metrics from Clickhouse",
+   "name": "my_status", // must be unique
+   "help": "My Status",
+   "query": "SELECT status, group, count(*) as counter FROM my_index FINAL PREWHERE (datetime >= toDateTime(now()-60)) AND (datetime < toDateTime(now()) ) group by status, group",
+   "labels": ["status","group"], // must match columns
+   "counter_name": "counter",
+   "refresh": "60s", //  Refesh takes unit sign: (ns, ms, s, m, h)
+   "type":"gauge" // gauge
+}
 ```
