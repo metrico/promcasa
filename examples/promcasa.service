@@ -1,18 +1,17 @@
-
-# cp promcasa.service /etc/systemd/system/
+# cp promcasa.service /usr/lib/systemd/system/
 # systemctl daemon-reload
 # systemctl start promcasa
 # systemctl enable promcasa
 
 [Unit]
-Description=promcasa Application Server
+Description=ClickHouse Prometheus Exporter
 After=network.target
 
 [Service]
-Environment="PROMCASA_CONFIG=-config-path=/usr/local/promcasa/etc/"
-ExecStart=/usr/local/promcasa/bin/promcasa $PROMCASA_CONFIG
+Environment="PROMCASA_CONFIG=-config-path=/etc/"
+ExecStart=/usr/local/bin/promcasa $PROMCASA_CONFIG
 Restart=always
-RestartSec=3s
+RestartSec=5s
 Type=simple
 
 [Install]
