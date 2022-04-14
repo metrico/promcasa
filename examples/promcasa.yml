@@ -1,0 +1,22 @@
+name: "promcasa"
+arch: "amd64"
+platform: "linux"
+version: "v${VERSION}"
+section: "default"
+priority: "extra"
+replaces:
+- promcasa
+provides:
+- promcasa
+maintainer: "Lorenzo Mangani <lorenzo.mangani@gmail.com>"
+description: |
+    PromCasa is a ClickHouse Custom exporter for Prometheus
+vendor: "QXIP"
+homepage: "http://cloki.org"
+license: "MIT"
+bindir: "/usr/local/bin"
+files:
+  promcasa: "/usr/local/bin/promcasa"
+config_files:
+  ./examples/promcasa.json: "/etc/promcasa.json"
+  ./examples/promcasa.service: "/usr/lib/systemd/system/promcasa.service"  
