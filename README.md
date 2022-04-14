@@ -9,7 +9,7 @@
 <img src="https://user-images.githubusercontent.com/1423657/153759412-bab0e246-4770-4fe4-b301-f48113c6b9d7.png" width=400 />
 
 
-#### :star: ClickHeus Functionality
+#### :star: Functionality
 
 - Execute recurring Clickhouse `queries`
 - Exctract mapped `labels` and `values`
