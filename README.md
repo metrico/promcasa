@@ -2,7 +2,7 @@
 
 # PromCasa
 
-ClickHouse Custom Metrics Exporter for Prometheus Scrapers. _Query, Aggregate and Publish metrics in zero time._
+**ClickHouse** Custom Metrics Exporter for Prometheus. _Query, Aggregate and Publish from ClickHouse in zero time._
 
 <br />
 
@@ -20,10 +20,10 @@ ClickHouse Custom Metrics Exporter for Prometheus Scrapers. _Query, Aggregate an
 
 #### :page_facing_up:	Configuration
 
-PromCasa acts according to the parameters configured in the `promcasa.json` file.
+**PromCasa** acts according to the parameters configured in the `promcasa.json` file.
 
 
-##### Query Buckets
+##### :bucket: Query Buckets
 To provision and publish a new metrics bucket, extend the configuration with a query set:
 ```javascript
 {
