@@ -4,7 +4,7 @@
 
  _Query, Aggregate and Publish_ anything from **ClickHouse** to **Prometheus** metrics in _zero time_
  
- Unlike other exporters limited to internal metrics, **PromCasa** is designed to unleash data from *any table* 
+ Unlike other exporters limited to internal metrics, **PromCasa** is designed to unleash data from *any query* 
 
 <br />
 
