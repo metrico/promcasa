@@ -46,7 +46,7 @@ To provision and publish a new metrics bucket, extend the configuration with a q
    "labels": ["status","group"], // must match columns
    "counter_name": "counter",
    "refresh": "60s", //  Refesh takes unit sign: (ns, ms, s, m, h)
-   "type":"gauge" // gauge
+   "type":"gauge" // gauge, histogram, counter
 }
 ```
 <br>
