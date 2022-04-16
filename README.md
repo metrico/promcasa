@@ -49,6 +49,9 @@ To provision and publish a new metrics bucket, extend the configuration with a q
    "type":"gauge" // gauge, histogram, counter
 }
 ```
+
+For a complete usage example, check out the [wiki](https://github.com/metrico/promcasa/wiki)
+
 <br>
 
 ## License
