@@ -55,4 +55,4 @@ For a complete usage example, check out the [wiki](https://github.com/metrico/pr
 <br>
 
 ## License
- ©️ [qxip/metrico](https://metrico.in) Licensed under AGPLv3 as part of [cLoki](https://cloki.org)
+ ©️ [qxip/metrico](https://metrico.in) Licensed under AGPLv3 as part of [qryn](https://qryn.dev)
