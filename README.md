@@ -1,4 +1,5 @@
-<img src="https://user-images.githubusercontent.com/1423657/153759243-d950b5fa-d2a7-49b7-894c-cfd9c9531f82.png" width=140 />
+<img src='https://user-images.githubusercontent.com/1423657/218816262-e0e8d7ad-44d0-4a7d-9497-0d383ed78b83.png' width=150 />
+
 
 # PromCasa
 
