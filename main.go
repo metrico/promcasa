@@ -350,12 +350,12 @@ func getDataDBSession() ([]*sqlx.DB, []model.DataDatabasesMap) {
 		timeReadTimeout, _ := time.ParseDuration(dbObject.ReadTimeout)
 		timeWriteTimeout, _ := time.ParseDuration(dbObject.WriteTimeout)
 
-		logger.Info(fmt.Sprintf("Connecting to Host: [%s], User:[%s], Name:[%s], Node:[%s], Port:[%d], Timeout: [%s, %s]\n",
-			dbObject.Host, dbObject.User, dbObject.Name, dbObject.Node,
+		logger.Info(fmt.Sprintf("Connecting to Proto: [%s] Host: [%s], User:[%s], Name:[%s], Node:[%s], Port:[%d], Timeout: [%s, %s]\n",
+			dbObject.Proto, dbObject.Host, dbObject.User, dbObject.Name, dbObject.Node,
 			dbObject.Port, dbObject.ReadTimeout, dbObject.WriteTimeout))
 
-		connectString := fmt.Sprintf("tcp://%s:%d?username=%s&password=%s&database=%s&read_timeout=%d&write_timeout=%d&compress=true&debug=%t",
-			dbObject.Host, dbObject.Port, dbObject.User, dbObject.Password, dbObject.Name,
+		connectString := fmt.Sprintf("%s://%s:%d?username=%s&password=%s&database=%s&read_timeout=%d&write_timeout=%d&compress=true&debug=%t",
+			dbObject.Proto, dbObject.Host, dbObject.Port, dbObject.User, dbObject.Password, dbObject.Name,
 			int(timeReadTimeout.Seconds()), int(timeWriteTimeout.Seconds()), dbObject.Debug)
 
 		db, err := sqlx.Open("clickhouse", connectString)
@@ -363,7 +363,7 @@ func getDataDBSession() ([]*sqlx.DB, []model.DataDatabasesMap) {
 		dbNodeMap = append(dbNodeMap, model.DataDatabasesMap{Name: dbObject.Name, DBname: dbObject.Name, Host: dbObject.Host,
 			TableSeries: dbObject.TableSeries, TableSamples: dbObject.TableSamples, Online: false})
 		if err != nil {
-			logger.Error(fmt.Sprintf("couldn't make connection to [Host: %s, Node: %s, Port: %d]: \n", dbObject.Host, dbObject.Node, dbObject.Port), err)
+			logger.Error(fmt.Sprintf("couldn't make connection to [Proto: %s, Host: %s, Node: %s, Port: %d]: \n", dbObject.Proto, dbObject.Host, dbObject.Node, dbObject.Port), err)
 			continue
 		}
 

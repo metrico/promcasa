@@ -1,6 +1,7 @@
 package model
 
 type DataDatabasesMap struct {
+	Proto        string `json:"proto"`
 	Value        string `json:"value"`
 	Node         string `json:"node"`
 	Name         string `json:"name"`
@@ -13,6 +14,7 @@ type DataDatabasesMap struct {
 }
 
 type ConfigDatabasesMap struct {
+	Proto       	 string  `json:"proto"`
 	Value           string   `json:"value"`
 	Name            string   `json:"name"`
 	Node            string   `json:"node"`

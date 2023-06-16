@@ -13,6 +13,7 @@ var Setting PromCasaSettingServer
 var NAME_APPLICATION = "promcasa"
 
 type PromCasaDataBase struct {
+	Proto        string `json:"proto" mapstructure:"proto" default:"tcp"`
 	User         string `json:"user" mapstructure:"user" default:"promcasa_user"`
 	Node         string `json:"node" mapstructure:"node" default:"promcasanode"`
 	Password     string `json:"pass" mapstructure:"pass" default:"promcasa_pass"`
