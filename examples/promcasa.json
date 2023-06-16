@@ -7,6 +7,7 @@
       "pass": "",
       "name": "loki",
       "table_prefix": "",
+      "proto": "tcp",
       "host": "127.0.0.1",
       "_port": "9000",
       "_read_timeout": "30s",
