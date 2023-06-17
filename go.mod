@@ -1,83 +1,39 @@
 module github.com/metrico/promcasa
 
-go 1.17
+go 1.15
 
 require (
-	github.com/ClickHouse/clickhouse-go v1.5.4 // indirect
-	github.com/Jeffail/gabs/v2 v2.6.1 // indirect
-	github.com/andybalholm/brotli v1.0.2 // indirect
-	github.com/ansrivas/fiberprometheus/v2 v2.1.2 // indirect
-	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/cespare/xxhash/v2 v2.1.2 // indirect
-	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
-	github.com/cloudflare/golz4 v0.0.0-20150217214814-ef862a3cdc58 // indirect
-	github.com/cortexproject/cortex v1.11.0 // indirect
-	github.com/felixge/httpsnoop v1.0.1 // indirect
-	github.com/fsnotify/fsnotify v1.5.1 // indirect
-	github.com/go-kit/kit v0.12.0 // indirect
-	github.com/go-kit/log v0.2.0 // indirect
-	github.com/go-logfmt/logfmt v0.5.1 // indirect
-	github.com/go-playground/locales v0.14.0 // indirect
-	github.com/go-playground/universal-translator v0.18.0 // indirect
-	github.com/gofiber/adaptor/v2 v2.1.1 // indirect
-	github.com/gofiber/fiber/v2 v2.26.0 // indirect
-	github.com/gofiber/utils v0.1.2 // indirect
-	github.com/gogo/googleapis v1.4.0 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/gogo/status v1.1.0 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/golang/snappy v0.0.4 // indirect
-	github.com/gorilla/mux v1.8.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0 // indirect
-	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jmoiron/sqlx v1.3.4 // indirect
-	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
-	github.com/leodido/go-urn v1.2.1 // indirect
-	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
-	github.com/lestrrat-go/strftime v1.0.5 // indirect
-	github.com/magiconair/properties v1.8.5 // indirect
-	github.com/manifoldco/promptui v0.9.0 // indirect
-	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
-	github.com/mcuadros/go-defaults v1.2.0 // indirect
-	github.com/mitchellh/mapstructure v1.4.3 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/opentracing-contrib/go-grpc v0.0.0-20210225150812-73cb765af46e // indirect
-	github.com/opentracing-contrib/go-stdlib v1.0.0 // indirect
-	github.com/opentracing/opentracing-go v1.2.0 // indirect
-	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
-	github.com/pelletier/go-toml v1.9.4 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/prometheus/client_golang v1.11.0 // indirect
-	github.com/prometheus/client_model v0.2.0 // indirect
-	github.com/prometheus/common v0.30.0 // indirect
-	github.com/prometheus/node_exporter v1.0.0-rc.0.0.20200428091818-01054558c289 // indirect
-	github.com/prometheus/procfs v0.7.3 // indirect
-	github.com/sercand/kuberesolver v2.4.0+incompatible // indirect
-	github.com/sirupsen/logrus v1.8.1 // indirect
-	github.com/spf13/afero v1.6.0 // indirect
-	github.com/spf13/cast v1.4.1 // indirect
-	github.com/spf13/jwalterweatherman v1.1.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.10.1 // indirect
-	github.com/subosito/gotenv v1.2.0 // indirect
-	github.com/uber/jaeger-client-go v2.29.1+incompatible // indirect
-	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
-	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.32.0 // indirect
-	github.com/valyala/tcplisten v1.0.0 // indirect
-	github.com/weaveworks/common v0.0.0-20210901124008-1fa3f9fa874c // indirect
-	github.com/weaveworks/promrus v1.2.0 // indirect
-	go.uber.org/atomic v1.9.0 // indirect
-	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf // indirect
-	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
-	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
-	golang.org/x/text v0.3.7 // indirect
-	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa // indirect
-	google.golang.org/grpc v1.43.0 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
-	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
-	gopkg.in/ini.v1 v1.66.2 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
+	github.com/ClickHouse/clickhouse-go/v2 v2.10.1 // indirect
+	github.com/Jeffail/gabs/v2 v2.7.0
+	github.com/VictoriaMetrics/fastcache v1.12.1
+	github.com/ansrivas/fiberprometheus/v2 v2.6.0
+	github.com/c2h5oh/datasize v0.0.0-20220606134207-859f65c6625b
+	github.com/cortexproject/cortex v1.15.2
+	github.com/go-kit/kit v0.12.0
+	github.com/gofiber/fiber/v2 v2.46.0
+	github.com/golang/snappy v0.0.4
+	github.com/jmoiron/sqlx v1.3.5
+	github.com/labstack/echo/v4 v4.10.2
+	github.com/labstack/gommon v0.4.0
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.6 // indirect
+	github.com/manifoldco/promptui v0.9.0
+	github.com/mcuadros/go-defaults v1.2.0
+	github.com/mitchellh/mapstructure v1.5.0
+	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.15.0
+	github.com/prometheus/common v0.42.0
+	github.com/rogpeppe/go-internal v1.10.0 // indirect
+	github.com/sirupsen/logrus v1.9.0
+	github.com/spf13/viper v1.13.0
+	github.com/stretchr/testify v1.8.2
+	github.com/valyala/bytebufferpool v1.0.0
+	golang.org/x/exp v0.0.0-20230321023759-10a507213a29 // indirect
+	golang.org/x/oauth2 v0.7.0 // indirect
+	golang.org/x/sync v0.1.0
+	google.golang.org/grpc v1.53.0
+	google.golang.org/protobuf v1.30.0
+	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
+	gopkg.in/go-playground/validator.v9 v9.31.0
+	gopkg.in/yaml.v2 v2.4.0
 )

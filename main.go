@@ -18,7 +18,6 @@ import (
 	"github.com/metrico/promcasa/utils/jobqueue"
 	"github.com/metrico/promcasa/utils/promcasautils"
 
-	"github.com/ClickHouse/clickhouse-go"
 	"github.com/ansrivas/fiberprometheus/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
@@ -31,7 +30,7 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
-//params for  Services
+// params for  Services
 type ServicesObject struct {
 	dataDBSession   []*sqlx.DB
 	databaseNodeMap []model.DataDatabasesMap
@@ -49,7 +48,7 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 var appFlags CommandLineFlags
 var servicesObject ServicesObject
 
-//params for Flags
+// params for Flags
 type CommandLineFlags struct {
 	InitializeDB    *bool   `json:"initialize_db"`
 	ShowHelpMessage *bool   `json:"help"`
@@ -134,8 +133,8 @@ func checkHelpVersionFlags() {
 	}
 }
 
-//https://github.com/atreugo/examples/blob/master/basic/main.go
-//https://github.com/jackwhelpton/fasthttp-routing
+// https://github.com/atreugo/examples/blob/master/basic/main.go
+// https://github.com/jackwhelpton/fasthttp-routing
 func readConfig() {
 	// Getting constant values
 	if configEnv := os.Getenv("PROMCASA_APPENV"); configEnv != "" {
@@ -304,7 +303,7 @@ func readConfig() {
 	//viper.Debug()
 }
 
-//system params for replications, groups
+// system params for replications, groups
 func setFastConfigSettings() {
 
 	/***********************************/
@@ -339,11 +338,6 @@ func getDataDBSession() ([]*sqlx.DB, []model.DataDatabasesMap) {
 
 	dbMap := []*sqlx.DB{}
 	dbNodeMap := []model.DataDatabasesMap{}
-
-	// Rlogs
-	if logger.RLogs != nil {
-		clickhouse.SetLogOutput(logger.RLogs)
-	}
 
 	for _, dbObject := range config.Setting.DATABASE_DATA {
 
@@ -421,8 +415,8 @@ func runSchedularPopulation() {
 	aggregator.ActivateTimer(servicesObject.dataDBSession, &servicesObject.databaseNodeMap)
 }
 
-//this function will check PROMCASA_DATABASE_DATA and set internal bind for viper
-//i.e. PROMCASA_DATABASE_DATA_0_HOSTNAME -> database_data[0].hostname
+// this function will check PROMCASA_DATABASE_DATA and set internal bind for viper
+// i.e. PROMCASA_DATABASE_DATA_0_HOSTNAME -> database_data[0].hostname
 func SetEnvironDataBase() bool {
 	var re = regexp.MustCompile(`_(\d)_`)
 	for _, s := range os.Environ() {
@@ -436,7 +430,7 @@ func SetEnvironDataBase() bool {
 	return true
 }
 
-//Now we should bind the ENV params
+// Now we should bind the ENV params
 func BindEnvs(iface interface{}, parts ...string) {
 	ifv := reflect.ValueOf(iface)
 	ift := reflect.TypeOf(iface)

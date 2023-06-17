@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ClickHouse/clickhouse-go"
+	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/Jeffail/gabs/v2"
 	"github.com/metrico/promcasa/config"
 	"github.com/metrico/promcasa/model"
