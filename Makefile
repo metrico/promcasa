@@ -1,7 +1,8 @@
 NAME?=promcasa
 
 all:
-	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o $(NAME)
+	#CGO_ENABLED=0 GOOS=linux go build -ldflags "-s -w" -o $(NAME)
+	CGO_ENABLED=1 GOOS=linux CGO_LDFLAGS="-lm -ldl" go build -a -ldflags '-extldflags "-static"' -tags netgo -installsuffix netgo -o $(NAME)
 	#go build -a -ldflags '-extldflags "-static"' -o $(NAME)
 
 debug:
