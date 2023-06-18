@@ -14,6 +14,7 @@ import (
 	"github.com/metrico/promcasa/utils/async"
 	"github.com/metrico/promcasa/utils/jobqueue"
 	"github.com/metrico/promcasa/utils/logger"
+	"github.com/metrico/promcasa/utils/promcasautils"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -172,7 +173,8 @@ func (ss *InsertService) DoMetricsQueries() error {
 				for _, label := range promCasaMetric.MetricLabels {
 
 					if value.Exists(label) {
-						labels[label] = value.S(label).Data().(string)
+						labels[label] = promcasautils.CheckStringValue(value.S(label).Data())
+						//labels[label] = value.S(label).Data().(string)
 					}
 				}
 
@@ -215,7 +217,8 @@ func (ss *InsertService) DoMetricsQueries() error {
 				for _, label := range promCasaMetric.MetricLabels {
 
 					if value.Exists(label) {
-						labels[label] = value.S(label).Data().(string)
+						labels[label] = promcasautils.CheckStringValue(value.S(label).Data())
+						//labels[label] = value.S(label).Data().(string)
 					}
 				}
 
@@ -257,7 +260,8 @@ func (ss *InsertService) DoMetricsQueries() error {
 				for _, label := range promCasaMetric.MetricLabels {
 
 					if value.Exists(label) {
-						labels[label] = value.S(label).Data().(string)
+						labels[label] = promcasautils.CheckStringValue(value.S(label).Data())
+						//labels[label] = value.S(label).Data().(string)
 					}
 				}
 

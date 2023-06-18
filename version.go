@@ -1,3 +1,3 @@
 package main
 
-var VERSION_APPLICATION = "1.0.2"
+var VERSION_APPLICATION = "1.0.3"

@@ -40,7 +40,7 @@ var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 var UUIDArray = [...]string{"callid", "session_id", "uuid", "sid", "cid", "correlation_id"}
 
-//import  checkFloatValue
+// import  checkFloatValue
 func CheckFloatValue(val interface{}) float64 {
 	if val != nil {
 		myType := reflect.TypeOf(val)
@@ -63,7 +63,29 @@ func CheckFloatValue(val interface{}) float64 {
 	return float64(0)
 }
 
-//import  checkFloatValue
+// import  checkFloatValue
+func CheckStringValue(val interface{}) string {
+	if val != nil {
+		myType := reflect.TypeOf(val)
+		switch myType.Kind() {
+		case reflect.Int:
+			return fmt.Sprintf("%d", val.(int))
+		case reflect.String:
+			return val.(string)
+		case reflect.Int32:
+			return fmt.Sprintf("%d", val.(int32))
+		case reflect.Float64:
+			return fmt.Sprintf("%f", val.(float64))
+		case reflect.Int64:
+			return fmt.Sprintf("%d", val.(int64))
+		default:
+			return ""
+		}
+	}
+	return ""
+}
+
+// import  checkFloatValue
 func CheckIntValue(val interface{}) int {
 	if val != nil {
 		myType := reflect.TypeOf(val)
@@ -84,7 +106,7 @@ func CheckIntValue(val interface{}) int {
 	return int(0)
 }
 
-//import  checkFloatValue
+// import  checkFloatValue
 func CheckBooleanValue(val interface{}) bool {
 	retVal := 0
 	if val != nil {
@@ -113,7 +135,7 @@ func CheckBooleanValue(val interface{}) bool {
 	}
 }
 
-//import  CheckTypeValue
+// import  CheckTypeValue
 func CheckTypeValue(val interface{}) reflect.Kind {
 	if val != nil {
 		return reflect.TypeOf(val).Kind()
@@ -121,7 +143,7 @@ func CheckTypeValue(val interface{}) reflect.Kind {
 	return reflect.Invalid
 }
 
-//import YesNo
+// import YesNo
 func YesNo(table string) bool {
 	prompt := promptui.Select{
 		Label: "Force to populate table [" + table + "]  [Yes/No]",
@@ -134,7 +156,7 @@ func YesNo(table string) bool {
 	return result == "Yes"
 }
 
-//import YesNo
+// import YesNo
 func YesNoPromptText(promptText string) bool {
 	prompt := promptui.Select{
 		Label: promptText + "  [Yes/No]",
@@ -199,7 +221,7 @@ func SanitizeIntArray(valArray []string) []int {
 	return intArray
 }
 
-//import  convertPayloadTypeToString
+// import  convertPayloadTypeToString
 func ConvertPayloadTypeToString(val float64) (string, string) {
 
 	var Method, Text string
@@ -242,7 +264,7 @@ func ConvertPayloadTypeToString(val float64) (string, string) {
 	return Method, Text
 }
 
-//import  convertProtoTypeToString
+// import  convertProtoTypeToString
 func ConvertProtoTypeToString(val float64) string {
 
 	var protoText string
@@ -265,7 +287,7 @@ func ConvertProtoTypeToString(val float64) string {
 	return protoText
 }
 
-//import  convertProtoTypeToString
+// import  convertProtoTypeToString
 func ConvertProtoStringToInt(val string) int {
 
 	var proto int
@@ -435,7 +457,6 @@ func FileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-//
 func MakeTimestamp() uint64 {
 	return uint64(time.Now().UnixNano() / int64(time.Millisecond))
 }
