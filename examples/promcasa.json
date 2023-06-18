@@ -10,8 +10,8 @@
       "proto": "tcp",
       "host": "127.0.0.1",
       "_port": "9000",
-      "_read_timeout": "30s",
-      "_write_timeout": "30s",
+      "_read_timeout": "5m",
+      "_dial_timeout": "30s",
       "strategy": "failover",
       "primary": true,
       "debug": true
@@ -87,6 +87,7 @@
     "uuid": "",
     "db_bulk": 1000,
     "db_timer": "2s",
+    "db_watcher": true,
     "buffer_size": 80000,
     "system_refresh": "10s"
   },

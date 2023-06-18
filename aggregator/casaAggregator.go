@@ -18,8 +18,10 @@ func ActivateTimer(dataSession []*sqlx.DB, databaseNodeMap *[]model.DataDatabase
 		DatabaseNodeMap: databaseNodeMap,
 	}
 
-	//Check DB status
-	go doConfigDabaseStats(&insertService)
+	//Check DB status - DB watcher is true
+	if config.Setting.SYSTEM_SETTINGS.DBWatcher {
+		go doConfigDabaseStats(&insertService)
+	}
 
 	//Check query status
 	go doMetricsScheduler(&insertService)

@@ -9,7 +9,7 @@ import (
 
 var Setting PromCasaSettingServer
 
-//NAME
+// NAME
 var NAME_APPLICATION = "promcasa"
 
 type PromCasaDataBase struct {
@@ -23,8 +23,8 @@ type PromCasaDataBase struct {
 	TableSeries  string `json:"table_series" mapstructure:"table_series" default:"time_series"`
 	Debug        bool   `json:"debug" mapstructure:"debug" default:"false"`
 	Port         uint32 `json:"port" mapstructure:"port" default:"9000"`
-	ReadTimeout  string `json:"read_timeout" mapstructure:"read_timeout" default:"30s"`
-	WriteTimeout string `json:"write_timeout" mapstructure:"write_timeout" default:"30s"`
+	ReadTimeout  string `json:"read_timeout" mapstructure:"read_timeout" default:"5m"`
+	DialTimeout  string `json:"dial_timeout" mapstructure:"dial_timeout" default:"30s"`
 	MaxIdleConn  int    `json:"max_idle_connection" mapstructure:"max_idle_connection" default:"5"`
 	MaxOpenConn  int    `json:"max_open_connection" mapstructure:"max_open_connection" default:"50"`
 	Primary      bool   `json:"primary" mapstructure:"primary" default:"false"`
@@ -64,6 +64,7 @@ type PromCasaSettingServer struct {
 		UUID                 string `json:"uuid" mapstructure:"uuid" default:""`
 		DBBulk               int    `json:"db_bulk" mapstructure:"db_bulk" default:"40000"`
 		DBTimer              string `json:"db_timer" mapstructure:"db_timer" default:"1s"`
+		DBWatcher            bool   `json:"db_watcher" mapstructure:"db_watcher" default:"true"`
 		BufferSizeSample     uint32 `json:"buffer_size_sample" mapstructure:"buffer_size_sample" default:"200000"`
 		BufferSizeTimeSeries uint32 `json:"buffer_size_timeseries" mapstructure:"buffer_size_timeseries" default:"200000"`
 		CPUMaxProcs          int    `json:"cpu_max_procs" mapstructure:"cpu_max_procs" default:"1"`

@@ -341,16 +341,13 @@ func getDataDBSession() ([]*sqlx.DB, []model.DataDatabasesMap) {
 
 	for _, dbObject := range config.Setting.DATABASE_DATA {
 
-		timeReadTimeout, _ := time.ParseDuration(dbObject.ReadTimeout)
-		timeWriteTimeout, _ := time.ParseDuration(dbObject.WriteTimeout)
-
 		logger.Info(fmt.Sprintf("Connecting to Proto: [%s] Host: [%s], User:[%s], Name:[%s], Node:[%s], Port:[%d], Timeout: [%s, %s]\n",
 			dbObject.Proto, dbObject.Host, dbObject.User, dbObject.Name, dbObject.Node,
-			dbObject.Port, dbObject.ReadTimeout, dbObject.WriteTimeout))
+			dbObject.Port, dbObject.ReadTimeout, dbObject.DialTimeout))
 
-		connectString := fmt.Sprintf("%s://%s:%d?username=%s&password=%s&database=%s&read_timeout=%d&write_timeout=%d&compress=true&debug=%t",
+		connectString := fmt.Sprintf("%s://%s:%d?username=%s&password=%s&database=%s&read_timeout=%s&dial_timeout=%s&compress=true&debug=%t",
 			dbObject.Proto, dbObject.Host, dbObject.Port, dbObject.User, dbObject.Password, dbObject.Name,
-			int(timeReadTimeout.Seconds()), int(timeWriteTimeout.Seconds()), dbObject.Debug)
+			dbObject.ReadTimeout, dbObject.DialTimeout, dbObject.Debug)
 
 		db, err := sqlx.Open("clickhouse", connectString)
 		dbMap = append(dbMap, db)
