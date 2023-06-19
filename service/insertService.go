@@ -77,7 +77,7 @@ func (ss *InsertService) DoMetricsQueries() error {
 		}
 
 		sqlQuery := strings.Replace(qObj.Query, "$refresh", fmt.Sprintf("interval %d SECOND", int(qObj.RefreshTimeout.Seconds())), -1)
-		logger.Debug("Execute query: ", index, sqlQuery)
+		logger.Debug("Execute index: [", index, "], query: ", sqlQuery)
 
 		future := async.ExecAsyncSql(func(query string, lIndex uint, qIndex int) model.AsyncSqlResult {
 			logger.Debug("Execute Async process on node: ", lIndex, qIndex)
